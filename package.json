@@ -1,0 +1,26 @@
+{
+    "name": "openai-proxy",
+    "version": "1.0.0",
+    "description": "Express-based proxy server for OpenAI API requests",
+    "main": "dist/server.js",
+    "scripts": {
+        "start": "node dist/server.js",
+        "dev": "ts-node src/server.ts",
+        "build": "tsc",
+        "watch": "tsc -w"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@types/cors": "^2.8.17",
+        "@types/express": "^5.0.0",
+        "@types/node": "^22.13.4",
+        "axios": "^1.7.9",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.7.3"
+    }
+}
