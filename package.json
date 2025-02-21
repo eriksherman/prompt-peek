@@ -5,9 +5,16 @@
     "main": "dist/server.js",
     "scripts": {
         "start": "node dist/server.js",
-        "dev": "ts-node src/server.ts",
         "build": "tsc",
-        "watch": "tsc -w"
+        "watch": "tsc -w",
+        "kill:ngrok": "pkill -f ngrok || true",
+        "kill:port": "lsof -ti:11434 | xargs kill -9 || true",
+        "kill:all": "pnpm run kill:ngrok && pnpm run kill:port && sleep 5 && rm -f ngrok.log",
+        "start:ngrok": "ngrok http 11434 --log=stdout > ngrok.log",
+        "wait:ngrok": "while ! grep -m1 'url=https://' ngrok.log; do sleep 1; done | grep -o 'https://.*\\.ngrok-free\\.app'",
+        "start:server": "PROXY_URL=$(grep -o 'https://.*\\.ngrok-free\\.app' ngrok.log) ts-node src/server.ts",
+        "dev": "concurrently \"pnpm run start:ngrok\" \"sleep 2 && pnpm run start:server\"",
+        "dev:clean": "pnpm run kill:all && pnpm run dev"
     },
     "keywords": [],
     "author": "",
@@ -22,5 +29,8 @@
         "express": "^4.21.2",
         "ts-node": "^10.9.2",
         "typescript": "^5.7.3"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
     }
 }

@@ -1,0 +1,80 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Kill All",
+            "type": "shell",
+            "command": "pnpm run kill:all",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Start Ngrok",
+            "type": "shell",
+            "command": "pnpm run start:ngrok",
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": ".*started tunnel.*url=(.+)",
+                    "file": 1
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".*starting web service.*",
+                    "endsPattern": ".*started tunnel.*"
+                }
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Wait for Ngrok URL",
+            "type": "shell",
+            "command": "pnpm run wait:ngrok",
+            "dependsOn": ["Start Ngrok"],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Start Server",
+            "type": "shell",
+            "command": "pnpm run start:server",
+            "dependsOn": ["Wait for Ngrok URL"],
+            "dependsOrder": "sequence",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Start Prompt Peek",
+            "dependsOn": ["Kill All", "Start Server"],
+            "dependsOrder": "sequence",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Start Prompt Peek (No Clean)",
+            "dependsOn": ["Start Server"],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        }
+    ]
+}

@@ -9,6 +9,7 @@ dotenv.config()
 const app = express()
 const PORT = 11434
 const OPENAI_API_BASE_URL = 'https://api.openai.com/v1'
+const PROXY_URL = process.env.PROXY_URL || `http://localhost:${PORT}`
 
 // Middleware
 app.use(cors())
@@ -125,9 +126,16 @@ app.post('/v1/chat/completions', async (req, res) => {
 // Start the server
 const server = app
     .listen(PORT, () => {
-        console.log(`Proxy server running at http://localhost:${PORT}`)
-        console.log(`Forwarding requests to ${OPENAI_API_BASE_URL}`)
-        console.log('API Key configured:', process.env.OPENAI_API_KEY ? 'Yes' : 'No')
+        console.log('\n=== Prompt Peek Server Started ===')
+        console.log(`Local URL: http://localhost:${PORT}`)
+        console.log(`Proxy URL: ${PROXY_URL}`)
+        console.log('\nTo use with Cursor:')
+        console.log(`1. Open Cursor's Command Palette (Cmd+Shift+P)`)
+        console.log('2. Type "settings" and select "Open Settings (JSON)"')
+        console.log('3. Add or update this setting:')
+        console.log(`   "openai.apiBaseUrl": "${PROXY_URL}/v1"`)
+        console.log('\nAPI Key configured:', process.env.OPENAI_API_KEY ? 'Yes' : 'No')
+        console.log('=================================\n')
     })
     .on('error', (error: any) => {
         console.error('Failed to start server:', error.message)
